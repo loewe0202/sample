@@ -1,4 +1,4 @@
-.doc-page{
+.doc-page {
   flex: 1;
   flex-direction: column;
 }
@@ -8,7 +8,7 @@
   padding-bottom: 80px;
   justify-content: center;
 }
-.page-title{
+.page-title {
   padding-top: 30px;
   padding-bottom: 30px;
   padding-left: 40px;
@@ -30,6 +30,17 @@
   padding: 30px;
   margin-bottom: 30px;
 }
+
+.button-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.button-wrap .btn {
+  width: 100%;
+}
+
 .btn {
   height: 80px;
   text-align: center;
@@ -45,7 +56,7 @@
 .text-center {
   justify-content: center;
 }
-.center{
+.center {
   align-items: center;
 }
 /* position */

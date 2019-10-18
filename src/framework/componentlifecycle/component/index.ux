@@ -1,5 +1,16 @@
 <template>
   <div class="doc-page">
+
+    <div class="page-title-wrap">
+      <text class="page-title">{{name}}</text>
+    </div>
+
+    <div class="input-item">
+      <div class="button-wrap">
+        <input class="btn" type="button" value="向父组件通信" onclick="changeName"></input>
+      </div>
+    </div>
+
     <div class="item-container">
       <div class="item-content" for="{{lifecycleList}}">
         <text class="txt">{{$item}}</text>
@@ -11,20 +22,25 @@
 </template>
 
 <style lang="less">
-  @import '../../../common/css/common.css';
-  .tutorial-page {
-    flex-direction: column;
-    padding-top: 20px;
-    .tutorial-title {
-      font-weight: bold;
-    }
+@import "../../../common/css/common.css";
+
+.tutorial-page {
+  flex-direction: column;
+  padding-top: 20px;
+  .tutorial-title {
+    font-weight: bold;
   }
+}
 </style>
 
 <script>
-  // 子组件
-  export default {
-    data: {
+// 子组件
+export default {
+  props: {
+    name: String
+  },
+  data() {
+    return {
       lifecycleList: [],
       lifecycleObject: {
         onInit: {
@@ -40,21 +56,38 @@
           desc: ` 在组件销毁后触发`
         },
       }
-    },
-    onInit() {
-      Object.keys(this.lifecycleObject).forEach(item => {
-        this.lifecycleList.push(item)
-      })
-      console.info(`### onInit ###`)
-        ++this.lifecycleObject.onInit.count
-    },
-    onReady() {
-      console.info(`### onReady ###`)
-        ++this.lifecycleObject.onReady.count
-    },
-    onDestroy() {
-      console.info(`### onDestroy ###`)
-        ++this.lifecycleObject.onDestroy.count
     }
+  },
+  changeName() {
+    // $emit
+    this.$emit('emitEvt', {
+      name: "我是来自子组件的消息"
+    })
+
+    // 发布 dispathEvt
+    this.$dispatch('dispathEvt', {
+      name: "我是来自子组件的消息"
+    })
+  },
+  onInit() {
+    Object.keys(this.lifecycleObject).forEach(item => {
+      this.lifecycleList.push(item)
+    })
+    console.info(`### onInit ###`)
+    ++this.lifecycleObject.onInit.count
+
+    this.$on('broadevt', this.broadevt)
+  },
+  onReady() {
+    console.info(`### onReady ###`)
+    ++this.lifecycleObject.onReady.count
+  },
+  onDestroy() {
+    console.info(`### onDestroy ###`)
+    ++this.lifecycleObject.onDestroy.count
+  },
+  broadevt(event) {
+    console.log("接收到父组件的消息: %o", event.detail)
   }
+}
 </script>

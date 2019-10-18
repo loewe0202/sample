@@ -5,38 +5,69 @@
         <div class="page-title-wrap">
             <text class="page-title">{{componentName}}</text>
         </div>
-        <comp></comp>
+
+        <div class="input-item">
+            <div class="button-wrap">
+                <input class="btn" type="button" value="向子组件通信" onclick="evtTypeEmit"></input>
+            </div>
+        </div>
+
+        <comp name="{{propsName}}" onemitEvt="emitEvtFn"></comp>
     </div>
 </template>
 
 <script>
-    export default {
-        private: {
+export default {
+    data() {
+        return {
+            count: 20,
+            propsName: "父组件传递内容",
             componentName: '组件生命周期'
-        },
-        onInit() {
-            this.$page.setTitleBar({
-                text: '组件生命周期'
-            })
         }
+    },
+    onInit() {
+        this.$page.setTitleBar({
+            text: '组件生命周期'
+        })
+
+        // 订阅 dispathEvt
+        this.$on('dispathEvt', this.dispathEvt)
+        
+        this.$on('emitEvt', this.emitEvtFn)
+    },
+    emitEvtFn(event) {
+        // 接收子组件的消息
+        console.log("emitEvtFn--event: %o", event)
+    },
+    dispathEvt(event) {
+        // 接收子组件的消息
+        console.log("dispathEvt--event: %o", event)
+    },
+    evtTypeEmit() {
+        // 向子组件传递通信
+        this.$broadcast('broadevt', {
+            name: "evtTypeEmit"
+        })
     }
+
+}
 </script>
 
 <style>
-    @import '../../common/css/common.css';
+@import "../../common/css/common.css";
 
-    .desc {
-        margin: 0 0 30px 75px;
-    }
+.desc {
+  margin: 0 0 30px 75px;
+}
 
-    a {
-        margin-left: 75px;
-        width: 600px;
-        padding-top: 50px;
-        padding-bottom: 50px;
-        margin-bottom: 100px;
-        background-color: #ffffff;
-        text-decoration: underline;
-        text-align: center;
-    }
+a {
+  margin-left: 75px;
+  width: 600px;
+  padding-top: 50px;
+  padding-bottom: 50px;
+  margin-bottom: 100px;
+  background-color: #ffffff;
+  text-decoration: underline;
+  text-align: center;
+}
 </style>
